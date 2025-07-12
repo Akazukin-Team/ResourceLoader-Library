@@ -1,6 +1,6 @@
-# ResourcLoader Library
+# ResourceLoader Library
 
-[![Build Status](https://github.com/Akazukin-Team/ResourcLoader-Library/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Akazukin-Team/ResourcLoader-Library/actions/workflows/build.yml?query=branch:main)
+[![Build Status](https://github.com/Akazukin-Team/ResourceLoader-Library/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Akazukin-Team/ResourceLoader-Library/actions/workflows/build.yml?query=branch:main)
 
 A loader library for files, uri and resource.
 
@@ -93,8 +93,8 @@ To build the project from source, follow these steps:
 
 1. Clone the repository:
     ```shell
-    git clone https://github.com/Akazukin-Team/ResourcLoader-Library.git
-    cd ResourcLoader-Library
+    git clone https://github.com/Akazukin-Team/ResourceLoader-Library.git
+    cd ResourceLoader-Library
     ```
 
 2. Build the project with Gradle:
