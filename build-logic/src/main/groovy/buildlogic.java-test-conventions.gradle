@@ -7,22 +7,24 @@ plugins {
 
 testing {
     suites {
-        test {
-            useJUnitJupiter()
-        }
-
         unitTest(JvmTestSuite) {
             dependencies {
                 implementation project()
             }
+            //workingDir = new File(projectDir, 'run/test/unitTest')
         }
 
         integrationTest(JvmTestSuite) {
             dependencies {
                 implementation project()
             }
+            //workingDir = new File(projectDir, 'run/test/integrationTest')
         }
     }
+}
+
+tasks.withType(Test).configureEach {
+    it.workingDir = new File(projectDir, "run/test/${it.name}")
 }
 
 tasks.named('check') {

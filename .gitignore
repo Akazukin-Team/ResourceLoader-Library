@@ -36,10 +36,6 @@ static-analysis.datadog.yml
 # Idk
 
 
-# Ignore the test directory
-run
-
-
 # Ignore Log files
 *.log
 *.hprof
