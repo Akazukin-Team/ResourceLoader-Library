@@ -26,7 +26,7 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
-    public IResource getResource() throws ResourceFetchException {
+    public IResource getInputStream() throws ResourceFetchException {
         try {
             final InputStream is = Files.newInputStream(Paths.get(this.identifier));
             return new InputStreamResource(this, is) {

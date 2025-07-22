@@ -8,5 +8,5 @@ public interface IResourceIdentifier {
 
     String getIdentifier();
 
-    IResource getResource() throws ResourceFetchException;
+    IResource getInputStream() throws ResourceFetchException;
 }

@@ -13,7 +13,7 @@ public class PathResourceIdentifierTest {
         final String result = "This is a test file.";
 
         final IResourceIdentifier uri = new PathResourceIdentifier("pathTest.txt");
-        try (final IResource res = uri.getResource()) {
+        try (final IResource res = uri.getInputStream()) {
             Assertions.assertArrayEquals(result.getBytes(), IOUtils.readAllBytes(res.getInputStream()), "The resource was not fetched correctly.");
         }
     }

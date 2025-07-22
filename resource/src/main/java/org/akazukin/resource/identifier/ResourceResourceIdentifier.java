@@ -31,7 +31,7 @@ public final class ResourceResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
-    public IResource getResource() throws ResourceFetchException {
+    public IResource getInputStream() throws ResourceFetchException {
         final InputStream is = this.classLoader.getResourceAsStream(this.identifier);
         if (is == null) {
             throw new ResourceFetchException(ResourceFetchException.RESOURCE_NOT_FOUND, this);
