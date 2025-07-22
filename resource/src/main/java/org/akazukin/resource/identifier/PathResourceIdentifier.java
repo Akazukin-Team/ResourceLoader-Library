@@ -5,9 +5,10 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.resource.exception.ResourceFetchException;
 import org.akazukin.resource.resource.IResource;
-import org.akazukin.resource.resource.InputStreamResource;
+import org.akazukin.resource.resource.StreamResource;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,7 +36,8 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
             }
 
             final InputStream is = Files.newInputStream(path);
-            return new InputStreamResource(this, is) {
+            final OutputStream os = Files.newOutputStream(path);
+            return new StreamResource(this, is, os) {
                 @Override
                 public String getType() {
                     return PathResourceIdentifier.this.getType();
