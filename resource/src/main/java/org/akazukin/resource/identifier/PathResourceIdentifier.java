@@ -27,7 +27,7 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
-    public IResource getResource() throws ResourceFetchException {
+    public IResource getInputStream() throws ResourceFetchException {
         try {
             final Path path = Paths.get(this.identifier);
             if (!path.toFile().exists()) {

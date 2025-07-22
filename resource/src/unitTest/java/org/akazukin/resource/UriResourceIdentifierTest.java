@@ -16,7 +16,7 @@ public class UriResourceIdentifierTest {
 
 
         final IResourceIdentifier uri = new UriResourceIdentifier("https://examplefile.com/robots.txt", true);
-        try (final IResource res = uri.getResource()) {
+        try (final IResource res = uri.getInputStream()) {
             Assertions.assertArrayEquals(result.getBytes(), IOUtils.readAllBytes(res.getInputStream()), "The resource was not fetched correctly.");
         }
     }

@@ -29,7 +29,7 @@ public class UriResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
-    public IResource getResource() throws ResourceFetchException {
+    public IResource getInputStream() throws ResourceFetchException {
         HttpURLConnection con = null;
         try {
             con = (HttpURLConnection) new URL(this.identifier).openConnection();
