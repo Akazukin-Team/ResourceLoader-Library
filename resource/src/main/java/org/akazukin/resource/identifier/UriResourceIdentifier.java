@@ -60,7 +60,7 @@ public class UriResourceIdentifier implements IResourceIdentifier {
             if (con != null) {
                 con.disconnect();
             }
-            throw new ResourceFetchException(ResourceFetchException.RESOURCE_FETCH_ERROR, t, this);
+            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
         }
     }
 

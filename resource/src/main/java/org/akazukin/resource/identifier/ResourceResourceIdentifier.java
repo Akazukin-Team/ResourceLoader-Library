@@ -32,16 +32,23 @@ public final class ResourceResourceIdentifier implements IResourceIdentifier {
 
     @Override
     public IResource getResource() throws ResourceFetchException {
-        final InputStream is = this.classLoader.getResourceAsStream(this.identifier);
-        if (is == null) {
-            throw new ResourceFetchException(ResourceFetchException.RESOURCE_NOT_FOUND, this);
-        }
-
-        return new InputStreamResource(this, is) {
-            @Override
-            public String getType() {
-                return ResourceResourceIdentifier.this.getType();
+        try {
+            final InputStream is = this.classLoader.getResourceAsStream(this.identifier);
+            if (is == null) {
+                throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this);
             }
-        };
+
+            return new InputStreamResource(this, is) {
+                @Override
+                public String getType() {
+                    return ResourceResourceIdentifier.this.getType();
+                }
+            };
+        } catch (final Throwable t) {
+            if (t instanceof ResourceFetchException) {
+                throw (ResourceFetchException) t;
+            }
+            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
+        }
     }
 }

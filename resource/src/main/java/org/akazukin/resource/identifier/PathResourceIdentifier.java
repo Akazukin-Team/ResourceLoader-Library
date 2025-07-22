@@ -9,6 +9,7 @@ import org.akazukin.resource.resource.InputStreamResource;
 
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -28,7 +29,12 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     @Override
     public IResource getResource() throws ResourceFetchException {
         try {
-            final InputStream is = Files.newInputStream(Paths.get(this.identifier));
+            final Path path = Paths.get(this.identifier);
+            if (!path.toFile().exists()) {
+                throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this);
+            }
+
+            final InputStream is = Files.newInputStream(path);
             return new InputStreamResource(this, is) {
                 @Override
                 public String getType() {
@@ -36,7 +42,10 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
                 }
             };
         } catch (final Throwable t) {
-            throw new ResourceFetchException(ResourceFetchException.RESOURCE_FETCH_ERROR, t, this);
+            if (t instanceof ResourceFetchException) {
+                throw (ResourceFetchException) t;
+            }
+            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
         }
     }
 }
