@@ -5,9 +5,10 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.resource.exception.ResourceFetchException;
 import org.akazukin.resource.resource.IResource;
-import org.akazukin.resource.resource.InputStreamResource;
+import org.akazukin.resource.resource.StreamResource;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
@@ -38,7 +39,8 @@ public class UriResourceIdentifier implements IResourceIdentifier {
 
             final AtomicReference<HttpURLConnection> atomicCon = new AtomicReference<>(con);
             final InputStream is = con.getInputStream();
-            return new InputStreamResource(this, is) {
+            final OutputStream os = con.getOutputStream();
+            return new StreamResource(this, is, os) {
                 @Override
                 public String getType() {
                     return UriResourceIdentifier.this.getType();
