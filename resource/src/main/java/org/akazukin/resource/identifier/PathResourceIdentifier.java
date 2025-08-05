@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.resource.exception.ResourceFetchException;
 import org.akazukin.resource.resource.IResource;
-import org.akazukin.resource.resource.InputStreamResource;
+import org.akazukin.resource.resource.StreamResource;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -21,6 +23,14 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
+    public String toString() {
+        return "PathResourceIdentifier{"
+                + "type='" + this.getType() + "', "
+                + "identifier='" + this.identifier + "'"
+                + '}';
+    }
+
+    @Override
     public String getType() {
         return "path";
     }
@@ -28,15 +38,26 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     @Override
     public IResource getResource() throws ResourceFetchException {
         try {
-            final InputStream is = Files.newInputStream(Paths.get(this.identifier));
-            return new InputStreamResource(this, is) {
+            final Path path = Paths.get(this.identifier);
+            if (!path.toFile().exists()) {
+                throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this);
+            }
+
+            final InputStream is = Files.newInputStream(path);
+            final OutputStream os = Files.newOutputStream(path);
+            return new StreamResource(this, is, os) {
                 @Override
                 public String getType() {
                     return PathResourceIdentifier.this.getType();
                 }
             };
         } catch (final Throwable t) {
-            throw new ResourceFetchException(ResourceFetchException.RESOURCE_FETCH_ERROR, t, this);
+            if (t instanceof ResourceFetchException) {
+                throw (ResourceFetchException) t;
+            }
+            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
         }
     }
+
+
 }
