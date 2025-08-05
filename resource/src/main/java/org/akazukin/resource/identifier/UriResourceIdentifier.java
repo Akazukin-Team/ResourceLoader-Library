@@ -25,6 +25,15 @@ public class UriResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
+    public String toString() {
+        return "ResourceResourceIdentifier{"
+                + "type='" + this.getType() + "', "
+                + "identifier='" + this.identifier + "',"
+                + "ssl=" + this.ssl
+                + '}';
+    }
+
+    @Override
     public String getType() {
         return "uri";
     }

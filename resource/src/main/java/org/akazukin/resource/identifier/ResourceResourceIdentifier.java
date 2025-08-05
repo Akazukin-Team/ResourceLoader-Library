@@ -26,6 +26,15 @@ public final class ResourceResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
+    public String toString() {
+        return "ResourceResourceIdentifier{"
+                + "type='" + this.getType() + "', "
+                + "identifier='" + this.identifier + "',"
+                + "classLoader=" + this.classLoader
+                + '}';
+    }
+
+    @Override
     public String getType() {
         return "resource";
     }
