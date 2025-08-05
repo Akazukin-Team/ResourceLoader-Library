@@ -23,6 +23,14 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
+    public String toString() {
+        return "PathResourceIdentifier{"
+                + "type='" + this.getType() + "', "
+                + "identifier='" + this.identifier + "'"
+                + '}';
+    }
+
+    @Override
     public String getType() {
         return "path";
     }
@@ -50,4 +58,6 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
             throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
         }
     }
+
+
 }

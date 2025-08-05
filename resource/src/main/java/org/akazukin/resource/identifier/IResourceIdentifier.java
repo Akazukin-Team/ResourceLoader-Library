@@ -33,4 +33,7 @@ public interface IResourceIdentifier {
      * @throws ResourceFetchException if the resource cannot be resolved, fetched, or if an error occurs during the retrieval process.
      */
     IResource getResource() throws ResourceFetchException;
+
+    @Override
+    String toString();
 }
