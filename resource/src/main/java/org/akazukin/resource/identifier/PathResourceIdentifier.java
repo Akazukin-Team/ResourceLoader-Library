@@ -5,11 +5,8 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.resource.exception.ResourceFetchException;
 import org.akazukin.resource.resource.IResource;
-import org.akazukin.resource.resource.StreamResource;
+import org.akazukin.resource.resource.PathResource;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -43,14 +40,7 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
                 throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this);
             }
 
-            final InputStream is = Files.newInputStream(path);
-            final OutputStream os = Files.newOutputStream(path);
-            return new StreamResource(this, is, os) {
-                @Override
-                public String getType() {
-                    return PathResourceIdentifier.this.getType();
-                }
-            };
+            return new PathResource(this);
         } catch (final Throwable t) {
             if (t instanceof ResourceFetchException) {
                 throw (ResourceFetchException) t;

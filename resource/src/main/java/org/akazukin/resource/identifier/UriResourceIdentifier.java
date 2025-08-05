@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.resource.exception.ResourceFetchException;
 import org.akazukin.resource.resource.IResource;
-import org.akazukin.resource.resource.StreamResource;
+import org.akazukin.resource.resource.UriResource;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import javax.net.ssl.SSLSocketFactory;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.atomic.AtomicReference;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UriResourceIdentifier implements IResourceIdentifier {
@@ -43,30 +41,23 @@ public class UriResourceIdentifier implements IResourceIdentifier {
         HttpURLConnection con = null;
         try {
             con = (HttpURLConnection) new URL(this.identifier).openConnection();
+
+            if (this.ssl) {
+                if (!(con instanceof javax.net.ssl.HttpsURLConnection)) {
+                    throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR,
+                            new IllegalArgumentException("SSL is enabled but the connection is not HTTPS"), this);
+                } else {
+                    ((javax.net.ssl.HttpsURLConnection) con).setSSLSocketFactory(this.createSocketFactory());
+                }
+            }
+
+            con.setDoInput(true);
+            con.setDoOutput(true);
+
             this.configureConnection(con);
             con.connect();
 
-            final AtomicReference<HttpURLConnection> atomicCon = new AtomicReference<>(con);
-            final InputStream is = con.getInputStream();
-            final OutputStream os = con.getOutputStream();
-            return new StreamResource(this, is, os) {
-                @Override
-                public String getType() {
-                    return UriResourceIdentifier.this.getType();
-                }
-
-                @Override
-                public void close() {
-                    synchronized (this) {
-                        final HttpURLConnection con = atomicCon.getAndSet(null);
-                        if (con != null) {
-                            System.out.println(con.getContentEncoding());
-                            con.disconnect();
-                        }
-                    }
-                    super.close();
-                }
-            };
+            return new UriResource(this, con);
         } catch (final Throwable t) {
             if (con != null) {
                 con.disconnect();
@@ -76,5 +67,9 @@ public class UriResourceIdentifier implements IResourceIdentifier {
     }
 
     protected void configureConnection(final HttpURLConnection con) {
+    }
+
+    protected SSLSocketFactory createSocketFactory() {
+        return (SSLSocketFactory) SSLSocketFactory.getDefault();
     }
 }
