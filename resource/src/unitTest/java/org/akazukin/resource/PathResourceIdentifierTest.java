@@ -14,12 +14,11 @@ import java.io.OutputStream;
 public class PathResourceIdentifierTest {
     @Test
     public void testFetch() throws Exception {
-        final String result = "This is a test file.";
 
         final IResourceIdentifier uri = new PathResourceIdentifier("pathTest.txt");
         try (final IResource res = uri.getResource();
              final InputStream is = res.getInputStream()) {
-            Assertions.assertArrayEquals(result.getBytes(), IOUtils.readAllBytes(is), "The resource was not fetched correctly.");
+            Assertions.assertArrayEquals(Constants.TEST_MSG.getBytes(), IOUtils.readAllBytes(is), "The resource was not fetched correctly.");
         }
     }
 
