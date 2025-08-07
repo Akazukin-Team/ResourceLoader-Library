@@ -14,7 +14,6 @@ public class UriResourceIdentifierTest {
                 "Allow: /\r\n" +
                 "Disallow: /public/";
 
-
         final IResourceIdentifier uri = new UriResourceIdentifier("https://examplefile.com/robots.txt", true);
         try (final IResource res = uri.getResource()) {
             Assertions.assertArrayEquals(result.getBytes(), IOUtils.readAllBytes(res.getInputStream()), "The resource was not fetched correctly.");

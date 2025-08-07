@@ -10,11 +10,9 @@ import sun.misc.IOUtils;
 public class ResourceResourceIdentifierTest {
     @Test
     public void testFetch() throws Exception {
-        final String result = "This is a test file.";
-
         final IResourceIdentifier uri = new ResourceResourceIdentifier("resourceTest.txt");
         try (final IResource res = uri.getResource()) {
-            Assertions.assertArrayEquals(result.getBytes(), IOUtils.readAllBytes(res.getInputStream()), "The resource was not fetched correctly.");
+            Assertions.assertArrayEquals(Constants.TEST_MSG.getBytes(), IOUtils.readAllBytes(res.getInputStream()), "The resource was not fetched correctly.");
         }
     }
 }
