@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.akazukin.resource.exception.ResourceFetchException;
+import org.akazukin.resource.exception.ResourceNotFoundException;
 import org.akazukin.resource.identifier.ResourceResourceIdentifier;
 
 import java.io.InputStream;
@@ -28,10 +28,10 @@ public class ResourceResource implements IResource {
     }
 
     @Override
-    public InputStream getInputStream() throws ResourceFetchException {
+    public InputStream getInputStream() throws ResourceNotFoundException {
         final InputStream is = this.identifier.getClassLoader().getResourceAsStream(this.getIdentifier().getIdentifier());
         if (is == null) {
-            throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this.identifier);
+            throw new ResourceNotFoundException(this.identifier);
         }
         return is;
     }

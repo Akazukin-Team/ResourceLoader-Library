@@ -44,8 +44,8 @@ public class UriResourceIdentifier implements IResourceIdentifier {
 
             if (this.ssl) {
                 if (!(con instanceof javax.net.ssl.HttpsURLConnection)) {
-                    throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR,
-                            new IllegalArgumentException("SSL is enabled but the connection is not HTTPS"), this);
+                    throw new ResourceFetchException(this,
+                            new IllegalArgumentException("SSL is enabled but the connection is not HTTPS"));
                 } else {
                     ((javax.net.ssl.HttpsURLConnection) con).setSSLSocketFactory(this.createSocketFactory());
                 }
@@ -58,11 +58,13 @@ public class UriResourceIdentifier implements IResourceIdentifier {
             con.connect();
 
             return new UriResource(this, con);
+        } catch (final ResourceFetchException e) {
+            throw e;
         } catch (final Throwable t) {
             if (con != null) {
                 con.disconnect();
             }
-            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
+            throw new ResourceFetchException(this, t);
         }
     }
 

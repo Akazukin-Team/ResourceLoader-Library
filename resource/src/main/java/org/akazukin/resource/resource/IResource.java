@@ -1,6 +1,7 @@
 package org.akazukin.resource.resource;
 
 import org.akazukin.resource.exception.ResourceFetchException;
+import org.akazukin.resource.exception.ResourceNotFoundException;
 import org.akazukin.resource.identifier.IResourceIdentifier;
 
 import java.io.Closeable;
@@ -35,7 +36,7 @@ public interface IResource extends Closeable {
      * @throws UnsupportedOperationException if the resource implementation does not support input streams.
      * @throws IllegalStateException         if the input stream is already closed or not available.
      */
-    InputStream getInputStream() throws ResourceFetchException;
+    InputStream getInputStream() throws ResourceNotFoundException, ResourceFetchException;
 
     /**
      * Provides an {@link OutputStream} for writing data to the resource.
@@ -44,7 +45,7 @@ public interface IResource extends Closeable {
      * @throws UnsupportedOperationException if the resource implementation does not support output streams.
      * @throws IllegalStateException         if the output stream is already closed or not available.
      */
-    OutputStream getOutputStream() throws ResourceFetchException;
+    OutputStream getOutputStream() throws ResourceNotFoundException, ResourceFetchException;
 
     @Override
     default void close() {

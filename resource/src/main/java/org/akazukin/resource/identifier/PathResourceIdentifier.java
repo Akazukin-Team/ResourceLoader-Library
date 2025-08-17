@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.resource.exception.ResourceFetchException;
+import org.akazukin.resource.exception.ResourceNotFoundException;
 import org.akazukin.resource.resource.IResource;
 import org.akazukin.resource.resource.PathResource;
 
@@ -33,19 +34,18 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
-    public IResource getResource() throws ResourceFetchException {
+    public IResource getResource() throws ResourceNotFoundException, ResourceFetchException {
         try {
             final Path path = Paths.get(this.identifier);
             if (!path.toFile().exists()) {
-                throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this);
+                throw new ResourceNotFoundException(this);
             }
 
             return new PathResource(this);
+        } catch (final ResourceNotFoundException e) {
+            throw e;
         } catch (final Throwable t) {
-            if (t instanceof ResourceFetchException) {
-                throw (ResourceFetchException) t;
-            }
-            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
+            throw new ResourceFetchException(this, t);
         }
     }
 
