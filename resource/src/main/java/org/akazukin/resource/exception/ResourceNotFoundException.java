@@ -13,14 +13,20 @@ import org.jetbrains.annotations.Nullable;
  * This exception is often used in conjunction with implementations of the {@link IResourceIdentifier} interface.
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public final class ResourceFetchException extends Exception {
-    public static final String MESSAGE = "Failed to fetch the resource;  Identifier:";
-    private static final long serialVersionUID = -966754699305131182L;
+public final class ResourceNotFoundException extends Exception {
+    public static final String MESSAGE = "The requested resource was not found; Identifier:";
+    private static final long serialVersionUID = 6684038629235688862L;
+
     @Getter
     IResourceIdentifier identifier;
 
-    public ResourceFetchException(@NotNull final IResourceIdentifier identifier, @Nullable final Throwable cause) {
+    public ResourceNotFoundException(@NotNull final IResourceIdentifier identifier, @Nullable final Throwable cause) {
         super(MESSAGE + identifier, cause);
+        this.identifier = identifier;
+    }
+
+    public ResourceNotFoundException(@NotNull final IResourceIdentifier identifier) {
+        super(MESSAGE + identifier);
         this.identifier = identifier;
     }
 }

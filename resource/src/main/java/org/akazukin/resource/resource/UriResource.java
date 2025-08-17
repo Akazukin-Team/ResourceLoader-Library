@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.akazukin.resource.exception.ResourceFetchException;
+import org.akazukin.resource.exception.ResourceNotFoundException;
 import org.akazukin.resource.identifier.UriResourceIdentifier;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -29,12 +31,14 @@ public class UriResource implements IResource {
     }
 
     @Override
-    public InputStream getInputStream() throws ResourceFetchException {
+    public InputStream getInputStream() throws ResourceFetchException, ResourceNotFoundException {
         try {
             return this.connection.getInputStream();
-        } catch (final Throwable e) {
-            log.error("Failed to get input stream for resource: {}", this.getIdentifier(), e);
-            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, e, this.getIdentifier());
+        } catch (final FileNotFoundException e) {
+            throw new ResourceNotFoundException(this.getIdentifier(), e);
+        } catch (final Throwable t) {
+            log.error("Failed to get input stream for resource: {}", this.getIdentifier(), t);
+            throw new ResourceFetchException(this.getIdentifier(), t);
         }
     }
 
@@ -42,9 +46,9 @@ public class UriResource implements IResource {
     public OutputStream getOutputStream() throws ResourceFetchException {
         try {
             return this.connection.getOutputStream();
-        } catch (final Throwable e) {
-            log.error("Failed to get output stream for resource: {}", this.getIdentifier(), e);
-            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, e, this.getIdentifier());
+        } catch (final Throwable t) {
+            log.error("Failed to get output stream for resource: {}", this.getIdentifier(), t);
+            throw new ResourceFetchException(this.getIdentifier(), t);
         }
     }
 }

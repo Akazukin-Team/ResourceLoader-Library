@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.akazukin.resource.exception.ResourceFetchException;
+import org.akazukin.resource.exception.ResourceNotFoundException;
 import org.akazukin.resource.identifier.PathResourceIdentifier;
 
 import java.io.InputStream;
@@ -29,32 +30,32 @@ public class PathResource implements IResource {
     }
 
     @Override
-    public InputStream getInputStream() throws ResourceFetchException {
+    public InputStream getInputStream() throws ResourceNotFoundException, ResourceFetchException {
         final Path path = Paths.get(this.identifier.getIdentifier());
         if (!path.toFile().exists()) {
-            throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this.getIdentifier());
+            throw new ResourceNotFoundException(this.getIdentifier());
         }
 
         try {
             return Files.newInputStream(path);
-        } catch (final Throwable e) {
-            log.error("Failed to get input stream for resource: {}", this.getIdentifier(), e);
-            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, e, this.getIdentifier());
+        } catch (final Throwable t) {
+            log.error("Failed to get input stream for resource: {}", this.getIdentifier(), t);
+            throw new ResourceFetchException(this.getIdentifier(), t);
         }
     }
 
     @Override
-    public OutputStream getOutputStream() throws ResourceFetchException {
+    public OutputStream getOutputStream() throws ResourceNotFoundException, ResourceFetchException {
         final Path path = Paths.get(this.identifier.getIdentifier());
         if (!path.toFile().exists()) {
-            throw new ResourceFetchException(ResourceFetchException.Type.NOT_FOUND, this.getIdentifier());
+            throw new ResourceNotFoundException(this.getIdentifier());
         }
 
         try {
             return Files.newOutputStream(path);
-        } catch (final Throwable e) {
-            log.error("Failed to get output stream for resource: {}", this.getIdentifier(), e);
-            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, e, this.getIdentifier());
+        } catch (final Throwable t) {
+            log.error("Failed to get output stream for resource: {}", this.getIdentifier(), t);
+            throw new ResourceFetchException(this.getIdentifier(), t);
         }
     }
 }

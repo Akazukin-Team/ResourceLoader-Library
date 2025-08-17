@@ -1,6 +1,7 @@
 package org.akazukin.resource.identifier;
 
 import org.akazukin.resource.exception.ResourceFetchException;
+import org.akazukin.resource.exception.ResourceNotFoundException;
 import org.akazukin.resource.resource.IResource;
 
 /**
@@ -30,9 +31,10 @@ public interface IResourceIdentifier {
      * The retrieval process may vary based on the specific implementation of the {@link IResourceIdentifier}.
      *
      * @return an instance of {@link IResource} representing the retrieved resource.
-     * @throws ResourceFetchException if the resource cannot be resolved, fetched, or if an error occurs during the retrieval process.
+     * @throws ResourceNotFoundException if the resource cannot be resolved.
+     * @throws ResourceFetchException    if the resource cannot be fetched, or if an error occurs during the retrieval process.
      */
-    IResource getResource() throws ResourceFetchException;
+    IResource getResource() throws ResourceNotFoundException, ResourceFetchException;
 
     @Override
     String toString();

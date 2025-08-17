@@ -3,7 +3,6 @@ package org.akazukin.resource.identifier;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.akazukin.resource.exception.ResourceFetchException;
 import org.akazukin.resource.resource.IResource;
 import org.akazukin.resource.resource.ResourceResource;
 
@@ -39,11 +38,7 @@ public final class ResourceResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
-    public IResource getResource() throws ResourceFetchException {
-        try {
-            return new ResourceResource(this);
-        } catch (final Throwable t) {
-            throw new ResourceFetchException(ResourceFetchException.Type.FETCH_ERROR, t, this);
-        }
+    public IResource getResource() {
+        return new ResourceResource(this);
     }
 }
