@@ -12,8 +12,8 @@ import java.io.InputStream;
 public class UriResourceIdentifierTest {
     @Test
     public void testFetch() throws Exception {
-        final String result = "User-agent: *\r\n" +
-                "Allow: /\r\n" +
+        final String result = "User-agent: *\n" +
+                "Allow: /\n" +
                 "Disallow: /public/";
 
         final IResourceIdentifier uri = new UriResourceIdentifier("https://examplefile.com/robots.txt", true);

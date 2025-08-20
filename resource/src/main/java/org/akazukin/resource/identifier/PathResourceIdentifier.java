@@ -48,6 +48,4 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
             throw new ResourceFetchException(this, t);
         }
     }
-
-
 }
