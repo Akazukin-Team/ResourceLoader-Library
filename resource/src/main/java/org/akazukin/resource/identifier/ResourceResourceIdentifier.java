@@ -38,6 +38,14 @@ public final class ResourceResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
+    public ResourceResourceIdentifier toRelativeIdentifier(final String relativePath) {
+        if (relativePath == null || relativePath.isEmpty()) {
+            return this;
+        }
+        return new ResourceResourceIdentifier(this.identifier + "/" + relativePath, this.classLoader);
+    }
+
+    @Override
     public IResource getResource() {
         return new ResourceResource(this);
     }

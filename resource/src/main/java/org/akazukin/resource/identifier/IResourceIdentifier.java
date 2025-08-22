@@ -27,6 +27,17 @@ public interface IResourceIdentifier {
     String getIdentifier();
 
     /**
+     * Converts the specified relative path into a new {@link IResourceIdentifier} instance.
+     * The resulting identifier represents the resource relative to the current identifier.
+     * The behavior and implementation of this method depend on the specific type of {@link IResourceIdentifier}.
+     *
+     * @param relativePath a {@link String} representing the relative path to the target resource.
+     *                     It should be relative to the current resource identifier.
+     * @return a new instance of {@link IResourceIdentifier} corresponding to the given relative path.
+     */
+    IResourceIdentifier toRelativeIdentifier(String relativePath);
+
+    /**
      * Resolves and retrieves the associated resource.
      * The retrieval process may vary based on the specific implementation of the {@link IResourceIdentifier}.
      *
