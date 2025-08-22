@@ -34,6 +34,14 @@ public final class PathResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
+    public PathResourceIdentifier toRelativeIdentifier(final String relativePath) {
+        if (relativePath == null || relativePath.isEmpty()) {
+            return this;
+        }
+        return new PathResourceIdentifier(Paths.get(this.identifier).resolve(relativePath).toString());
+    }
+
+    @Override
     public IResource getResource() throws ResourceNotFoundException, ResourceFetchException {
         try {
             final Path path = Paths.get(this.identifier);

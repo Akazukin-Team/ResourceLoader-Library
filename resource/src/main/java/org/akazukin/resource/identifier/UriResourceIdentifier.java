@@ -7,6 +7,7 @@ import org.akazukin.resource.exception.ResourceFetchException;
 import org.akazukin.resource.resource.IResource;
 import org.akazukin.resource.resource.UriResource;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,17 +38,25 @@ public class UriResourceIdentifier implements IResourceIdentifier {
     }
 
     @Override
+    public UriResourceIdentifier toRelativeIdentifier(final String relativePath) {
+        if (relativePath == null || relativePath.isEmpty()) {
+            return this;
+        }
+        return new UriResourceIdentifier(this.identifier + "/" + relativePath, this.ssl);
+    }
+
+    @Override
     public IResource getResource() throws ResourceFetchException {
         HttpURLConnection con = null;
         try {
             con = (HttpURLConnection) new URL(this.identifier).openConnection();
 
             if (this.ssl) {
-                if (!(con instanceof javax.net.ssl.HttpsURLConnection)) {
+                if (!(con instanceof HttpsURLConnection)) {
                     throw new ResourceFetchException(this,
                             new IllegalArgumentException("SSL is enabled but the connection is not HTTPS"));
                 } else {
-                    ((javax.net.ssl.HttpsURLConnection) con).setSSLSocketFactory(this.createSocketFactory());
+                    ((HttpsURLConnection) con).setSSLSocketFactory(this.createSocketFactory());
                 }
             }
 
