@@ -8,30 +8,39 @@ plugins {
 testing {
     suites {
         unitTest(JvmTestSuite) {
+            useJUnitJupiter()
+
             dependencies {
                 implementation project()
             }
-            //workingDir = new File(projectDir, 'run/test/unitTest')
         }
 
         integrationTest(JvmTestSuite) {
+            useJUnitJupiter()
+
             dependencies {
                 implementation project()
             }
-            //workingDir = new File(projectDir, 'run/test/integrationTest')
         }
     }
 }
 
+tasks.named('test') {
+    enabled = false
+}
+
 tasks.withType(Test).configureEach {
+    if (!it.enabled) {
+        return
+    }
+
     it.workingDir = new File(projectDir, "run/test/${it.name}")
+    if (!it.workingDir.exists()) {
+        it.workingDir.mkdirs()
+    }
 }
 
 tasks.named('check') {
     dependsOn(testing.suites.unitTest)
     dependsOn(testing.suites.integrationTest)
-}
-
-tasks.named('test') {
-    enabled = false
 }
